@@ -2,7 +2,8 @@ DSPscreensz=[150,100,4];
 DSPscreenr=2;
 
 currentscreen=[73,40,3];
-tempscreen=[46,26,3];
+tempscreen=[71.14+1,24.12+1,3];
+tempscreen2=[80+1,35.9+1,6.2];
 
 DSPbacksz=[80,70,25];
 DSPbezelT=4;
@@ -11,7 +12,7 @@ cornerradius=4;
 innerradius=3;
 wallt=5;
 topt=5;
-facesz=[DSPscreensz[0]+wallt*2+5*3,170];
+facesz=[currentscreen[0]+wallt*2+5*3+100,170];
 
 h=15;//height at theoretical front corner. (doesn't exist because of radius)
 
@@ -64,6 +65,7 @@ module pillar(facesz, h, cornerradius, angle){
     }        
 
 module bezel(){
+    offset1=(facesz[0]-DSPscreensz[0])/2;
     difference(){
 
         union(){
@@ -77,18 +79,17 @@ module bezel(){
         pillar([for(v=facesz)v-2*wallt], h, innerradius, angle);
         }
         
-        translate([5,5,-topt])
+        translate([offset1-5,wallt+6-5,.5-topt])
         cplate(DSPscreensz[0]+10,DSPscreensz[1]+10,topt+1,DSPscreenr);
         }
         
-        offset1=(facesz[0]-DSPscreensz[0])/2;
-        translate([offset1,offset1,0])
+        translate([offset1,wallt+6,0])
         cplate(DSPscreensz[0],DSPscreensz[1],topt*2,DSPscreenr);
 
-        translate([offset1,offset1,-topt])
+        translate([offset1,wallt+6,-topt])
         cplate(DSPscreensz[0],DSPscreensz[1],topt*2,30);
 
-        translate([facesz[0]/2,offset1+DSPscreensz[1]/2,0])
+        translate([facesz[0]/2,wallt+6+DSPscreensz[1]/2,0])
         for(i = [-1,1])
         for(j = [-1,1])
         translate([i*141/2,j*91/2,-50])
@@ -96,16 +97,23 @@ module bezel(){
         
         offset2=(facesz[0]-currentscreen[0]-tempscreen[0])/3;
         //offset2=cornerradius+2+4;
-        translate([offset2,offset1+DSPscreensz[1]+6,-topt]){
+        translate([offset2,wallt+6+DSPscreensz[1]+6,-topt]){
             cplate(currentscreen[0],currentscreen[1],topt*2,1);
             translate([-4,0,-2.4])
             cplate(currentscreen[0]+8,currentscreen[1],topt*2,1);
         }
-        translate([offset2+currentscreen[0]+offset2,(offset1+DSPscreensz[1])+(facesz[1]-cornerradius-(offset1+DSPscreensz[1]))/2-tempscreen[1]/2,-topt]){
-            cplate(tempscreen[0],tempscreen[1],topt*2,1);
-            translate([-4,0,-2.4])
-            cplate(tempscreen[0]+8,tempscreen[1],topt*2,1);
-        }
+        translate([offset2+currentscreen[0]+offset2,(wallt+6+DSPscreensz[1])+(facesz[1]-cornerradius-(wallt+6+DSPscreensz[1]))/2-tempscreen[1]/2,-.5]){
+            cplate(tempscreen[0],tempscreen[1],topt+1,1);
+            translate([(tempscreen[0]-tempscreen2[0])/2,(tempscreen[1]-tempscreen2[1])/2,.5-3.2+4.3-2.4])
+            cplate(tempscreen2[0],tempscreen2[1],3.2,13);
+        translate([tempscreen[0]/2,tempscreen[1]/2,0])
+        for(i = [-1,1])
+        for(j = [-1,1])
+        translate([i*75/2,j*31/2,-10-.7+5])
+        cylinder(r=1.1, h=10);
+
+    
+            }
         
 
     }
